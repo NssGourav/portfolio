@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 
@@ -7,82 +8,172 @@ const About = () => {
     triggerOnce: true,
   })
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
   return (
-    <section id="about" className="py-20">
+    <section id="about" className="py-20 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Floating orbs */}
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200 rounded-full blur-3xl opacity-20 dark:bg-primary-800 animate-float-up-slow"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-200 rounded-full blur-3xl opacity-20 dark:bg-secondary-800 animate-float-up-slow" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/4 left-1/4 w-60 h-60 bg-primary-300 rounded-full blur-3xl opacity-20 dark:bg-primary-700 animate-float-up-slow" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-1/4 right-1/4 w-60 h-60 bg-secondary-300 rounded-full blur-3xl opacity-20 dark:bg-secondary-700 animate-float-up-slow" style={{ animationDelay: '3s' }}></div>
+        
+        {/* Spinning gradients */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-conic from-primary-400 via-secondary-500 to-primary-400 rounded-full blur-3xl opacity-20 animate-spin-slow"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-conic from-secondary-400 via-primary-500 to-secondary-400 rounded-full blur-3xl opacity-20 animate-spin-slow" style={{ animationDirection: 'reverse' }}></div>
+        
+        {/* Particle effects */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-primary-400 rounded-full animate-float-up"
+              style={{
+                left: `${Math.random() * 100}%`,
+                bottom: '-10%',
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${Math.random() * 3 + 2}s`,
+                opacity: Math.random() * 0.5 + 0.5,
+              }}
+            ></div>
+          ))}
+        </div>
+      </div>
+
       <motion.div
         ref={ref}
-        initial={{ opacity: 0, y: 20 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8 }}
-        className="max-w-4xl mx-auto"
+        initial="hidden"
+        animate={inView ? "visible" : "hidden"}
+        variants={containerVariants}
+        className="container relative z-10"
       >
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <motion.h2
+          variants={itemVariants}
+          className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-primary-600 via-secondary-500 to-primary-600 dark:from-primary-400 dark:via-secondary-300 dark:to-primary-400 animate-gradient"
+        >
           About Me
-        </h2>
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              I'm a passionate Frontend Developer with a strong focus on creating
-              beautiful, responsive, and user-friendly web applications. With a
-              background in computer science and a keen eye for design, I strive to
-              create digital experiences that are both functional and visually
-              appealing.
-            </p>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              My journey in web development started with a curiosity about how
-              websites work, and it has evolved into a deep passion for creating
-              modern web applications using the latest technologies and best
-              practices.
-            </p>
-            <p className="text-gray-600 dark:text-gray-300">
-              When I'm not coding, you can find me exploring new technologies,
-              contributing to open-source projects, or working on personal
-              projects that challenge me to grow as a developer.
-            </p>
+        </motion.h2>
+        
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Education */}
+          <motion.div variants={itemVariants}>
+            <h3 className="text-2xl font-semibold mb-6 text-primary-600 dark:text-primary-400">Education</h3>
+            <div className="space-y-6">
+              <motion.div
+                whileHover={{ scale: 1.02, y: -5, rotate: 1 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-primary-500 group relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+                <h4 className="text-xl font-semibold mb-2 text-primary-600 dark:text-primary-400">B.Tech CSE (AI & ML)</h4>
+                <p className="text-gray-600 dark:text-gray-300">Ajeenkya DY Patil University</p>
+                <p className="text-gray-500 dark:text-gray-400">2024 - 2028</p>
+              </motion.div>
+              
+              <motion.div
+                whileHover={{ scale: 1.02, y: -5, rotate: -1 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-secondary-500 group relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-secondary-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-secondary-600 to-primary-600 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+                <h4 className="text-xl font-semibold mb-2 text-secondary-600 dark:text-secondary-400">Intermediate (Class XII)</h4>
+                <p className="text-gray-600 dark:text-gray-300">Sri Chaitanya</p>
+                <p className="text-gray-500 dark:text-gray-400">2022 - 2024</p>
+              </motion.div>
+              
+              <motion.div
+                whileHover={{ scale: 1.02, y: -5, rotate: 1 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-primary-500 group relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+                <h4 className="text-xl font-semibold mb-2 text-primary-600 dark:text-primary-400">Matriculation (Class X)</h4>
+                <p className="text-gray-600 dark:text-gray-300">FIITJEE International School</p>
+                <p className="text-gray-500 dark:text-gray-400">2020 - 2021</p>
+              </motion.div>
+            </div>
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="grid grid-cols-2 gap-4"
-          >
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Education
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Bachelor's in Computer Science
-              </p>
-            </div>
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Experience
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                2+ Years in Web Development
-              </p>
-            </div>
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Location
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">India</p>
-            </div>
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Availability
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">Open to Work</p>
+
+          {/* Experience */}
+          <motion.div variants={itemVariants}>
+            <h3 className="text-2xl font-semibold mb-6 text-secondary-600 dark:text-secondary-400">Experience</h3>
+            <div className="space-y-6">
+              <motion.div
+                whileHover={{ scale: 1.02, y: -5, rotate: -1 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-primary-500 group relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+                <h4 className="text-xl font-semibold mb-2 text-primary-600 dark:text-primary-400">Discord Server Designer</h4>
+                <p className="text-gray-600 dark:text-gray-300">Newton School - Go For Gold</p>
+                <p className="text-gray-500 dark:text-gray-400">November 2025 - December 2025</p>
+                <ul className="list-disc list-inside mt-2 text-gray-600 dark:text-gray-300 space-y-2">
+                  <li>Discord Server Management</li>
+                  <li>Bot Development and Automation</li>
+                  <li>User Experience Optimization</li>
+                  <li>Community Moderation</li>
+                  <li>Technical Troubleshooting</li>
+                </ul>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.02, y: -5, rotate: 1 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-secondary-500 group relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-secondary-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-secondary-600 to-primary-600 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+                <h4 className="text-xl font-semibold mb-2 text-secondary-600 dark:text-secondary-400">Badminton Coordinator</h4>
+                <p className="text-gray-600 dark:text-gray-300">Ajeenkya DY Patil University X Newton School Of Technology</p>
+                <p className="text-gray-500 dark:text-gray-400">September 2025 - Present</p>
+                <ul className="list-disc list-inside mt-2 text-gray-600 dark:text-gray-300 space-y-2">
+                  <li>Organized inter-batch tournaments</li>
+                  <li>Created match schedules and court assignments</li>
+                  <li>Managed logistics and event setup</li>
+                </ul>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.02, y: -5, rotate: -1 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-primary-500 group relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+                <h4 className="text-xl font-semibold mb-2 text-primary-600 dark:text-primary-400">Hackathon Organizer</h4>
+                <p className="text-gray-600 dark:text-gray-300">Ajeenkya DY Patil University X Newton School Of Technology</p>
+                <p className="text-gray-500 dark:text-gray-400">January 2025 - March 2025</p>
+                <ul className="list-disc list-inside mt-2 text-gray-600 dark:text-gray-300 space-y-2">
+                  <li>Organized and managed Hackron Hackathon</li>
+                  <li>Successfully brought in 50 teams</li>
+                  <li>Managed mentor availability and volunteer coordination</li>
+                </ul>
+              </motion.div>
             </div>
           </motion.div>
         </div>
       </motion.div>
     </section>
-  )
-}
+  );
+};
 
-export default About 
+export default About; 
