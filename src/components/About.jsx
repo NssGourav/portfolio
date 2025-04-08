@@ -110,7 +110,7 @@ const About = () => {
                 <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
                 <h4 className="text-xl font-semibold mb-2 text-primary-600 dark:text-primary-400">Matriculation (Class X)</h4>
                 <p className="text-gray-600 dark:text-gray-300">FIITJEE International School</p>
-                <p className="text-gray-500 dark:text-gray-400">2020 - 2021</p>
+                <p className="text-gray-500 dark:text-gray-400">2020 - 2022</p>
               </motion.div>
             </div>
           </motion.div>
