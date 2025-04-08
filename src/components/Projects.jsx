@@ -1,106 +1,240 @@
-import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-
-const projects = [
-  {
-    title: 'E-commerce Platform',
-    description: 'A full-featured e-commerce platform with product catalog, cart, and checkout functionality.',
-    technologies: ['React', 'Node.js', 'MongoDB', 'Express'],
-    image: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    github: '#',
-    demo: '#',
-  },
-  {
-    title: 'Task Management App',
-    description: 'A collaborative task management application with real-time updates and team features.',
-    technologies: ['React', 'Firebase', 'Material-UI'],
-    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    github: '#',
-    demo: '#',
-  },
-  {
-    title: 'Weather Dashboard',
-    description: 'A weather application with real-time forecasts and interactive maps.',
-    technologies: ['React', 'OpenWeather API', 'Chart.js'],
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    github: '#',
-    demo: '#',
-  },
-]
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 const Projects = () => {
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
-  })
+  });
+
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Smooth spring animation for scroll progress
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  // Parallax effect for background elements
+  const y = useTransform(smoothProgress, [0, 1], [0, -100]);
+  const opacity = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const scale = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 0.8]);
+
+  // Scroll-based rotation for project cards
+  const rotateX = useTransform(smoothProgress, [0, 0.5, 1], [0, 5, 0]);
+  const rotateY = useTransform(smoothProgress, [0, 0.5, 1], [0, -5, 0]);
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
+  const projects = [
+    {
+      title: "Balloon Adventure",
+      description: "A simple game built using HTML, CSS, and JavaScript. The project serves as a foundation for learning game mechanics, event handling, and rendering graphics in a web environment.",
+      features: [
+        "Interactive gameplay",
+        "Player controls",
+        "Collision detection",
+        "Score tracking"
+      ],
+      links: {
+        github: "#",
+        demo: "#"
+      },
+      date: "March 2025"
+    },
+    {
+      title: "Sem1 Project",
+      description: "A web development project focusing on core skills in HTML and CSS, demonstrating proficiency in front-end development.",
+      features: [
+        "Core Skills: Web development fundamentals using HTML and CSS",
+        "Outcome: A structured and styled web project",
+        "Impact: Strengthened problem-solving abilities and hands-on experience"
+      ],
+      links: {
+        github: "#",
+        demo: "#"
+      },
+      date: "December 2024"
+    }
+  ];
 
   return (
-    <section id="projects" className="py-20">
+    <section id="projects" className="py-20 relative overflow-hidden" ref={containerRef}>
+      {/* Background with enhanced effects */}
+      <motion.div 
+        className="absolute inset-0 overflow-hidden"
+        style={{ 
+          y,
+          opacity,
+          rotateX,
+          rotateY,
+          perspective: "1000px",
+          background: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%)"
+        }}
+      >
+        {/* Floating orbs */}
+        <motion.div 
+          className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200/30 rounded-full blur-3xl opacity-20 dark:bg-primary-800/30"
+          style={{
+            y: useTransform(smoothProgress, [0, 1], [0, -50]),
+            x: useTransform(smoothProgress, [0, 1], [0, -30]),
+            boxShadow: "0 0 50px rgba(99, 102, 241, 0.2)"
+          }}
+        ></motion.div>
+        <motion.div 
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-200/30 rounded-full blur-3xl opacity-20 dark:bg-secondary-800/30"
+          style={{
+            y: useTransform(smoothProgress, [0, 1], [0, 50]),
+            x: useTransform(smoothProgress, [0, 1], [0, 30]),
+            boxShadow: "0 0 50px rgba(236, 72, 153, 0.2)"
+          }}
+        ></motion.div>
+        
+        {/* Spinning gradients */}
+        <motion.div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-conic from-primary-400/30 via-secondary-500/30 to-primary-400/30 rounded-full blur-3xl opacity-20"
+          style={{
+            rotate: useTransform(smoothProgress, [0, 1], [0, 360]),
+            boxShadow: "0 0 100px rgba(99, 102, 241, 0.1)"
+          }}
+        ></motion.div>
+        
+        {/* Particle effects */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-primary-400/50 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                bottom: '-10%',
+                opacity: Math.random() * 0.5 + 0.5,
+                boxShadow: "0 0 10px rgba(99, 102, 241, 0.3)"
+              }}
+              animate={{
+                y: [0, -1000],
+                opacity: [1, 0],
+                x: [0, Math.random() * 100 - 50],
+              }}
+              transition={{
+                duration: Math.random() * 3 + 2,
+                repeat: Infinity,
+                delay: Math.random() * 5,
+              }}
+            ></motion.div>
+          ))}
+        </div>
+      </motion.div>
+
       <motion.div
         ref={ref}
-        initial={{ opacity: 0, y: 20 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8 }}
-        className="max-w-7xl mx-auto"
+        initial="hidden"
+        animate={inView ? "visible" : "hidden"}
+        variants={containerVariants}
+        className="container relative z-10"
+        style={{ 
+          scale,
+          rotateX,
+          rotateY,
+          perspective: "1000px"
+        }}
       >
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-          Featured Projects
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.h2
+          variants={itemVariants}
+          className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-primary-600 via-secondary-500 to-primary-600 dark:from-primary-400 dark:via-secondary-300 dark:to-primary-400"
+          style={{
+            backgroundSize: "200% auto",
+            animation: "gradient 8s linear infinite",
+            textShadow: "0 0 20px rgba(99, 102, 241, 0.3)"
+          }}
+        >
+          Projects
+        </motion.h2>
+
+        <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+              key={index}
+              variants={itemVariants}
+              whileHover={{ 
+                scale: 1.02, 
+                y: -5, 
+                rotate: index % 2 === 0 ? 1 : -1,
+                transition: { duration: 0.3 }
+              }}
+              style={{
+                rotateX: useTransform(smoothProgress, [0, 0.5, 1], [0, index % 2 === 0 ? 2 : -2, 0]),
+                rotateY: useTransform(smoothProgress, [0, 0.5, 1], [0, index % 2 === 0 ? -2 : 2, 0])
+              }}
+              className="bg-white/90 dark:bg-gray-800/90 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-primary-500 group relative overflow-hidden"
             >
-              <div className="relative h-48">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                  {project.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex gap-4">
-                  <a
-                    href={project.github}
-                    className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  >
-                    GitHub
-                  </a>
-                  <a
-                    href={project.demo}
-                    className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  >
-                    Live Demo
-                  </a>
-                </div>
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+              
+              {/* Project content */}
+              <h3 className="text-2xl font-semibold mb-4 text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300 transition-colors">
+                {project.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+                {project.description}
+              </p>
+              <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2 mb-4">
+                {project.features.map((feature, i) => (
+                  <li key={i} className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex gap-4">
+                <motion.a
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  href={project.links.github}
+                  className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-lg hover:shadow-primary-600/50"
+                >
+                  View Code
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  href={project.links.demo}
+                  className="px-4 py-2 border-2 border-primary-600 text-primary-600 dark:text-primary-400 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors shadow-lg hover:shadow-primary-600/30"
+                >
+                  Live Demo
+                </motion.a>
               </div>
             </motion.div>
           ))}
         </div>
       </motion.div>
     </section>
-  )
-}
+  );
+};
 
-export default Projects 
+export default Projects; 
