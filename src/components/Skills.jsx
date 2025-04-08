@@ -155,15 +155,14 @@ const Skills = () => {
             <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
             <h3 className="text-2xl font-semibold mb-6 text-primary-600 dark:text-primary-400">Certifications</h3>
             <div className="space-y-4">
-              {skills.certifications.map((cert, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  className="p-3 rounded-lg bg-primary-50 dark:bg-primary-900/20 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 transition-colors"
-                >
-                  <span className="text-gray-600 dark:text-gray-300">{cert}</span>
-                </motion.div>
-              ))}
+              <div>
+                <h4 className="text-lg font-semibold mb-2 text-primary-400">Certifications</h4>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 bg-secondary-900 text-secondary-300 rounded-full text-sm">Clearing DSA Mock Interview</span>
+                  <span className="px-3 py-1 bg-secondary-900 text-secondary-300 rounded-full text-sm">AI for Everyone</span>
+                  <span className="px-3 py-1 bg-secondary-900 text-secondary-300 rounded-full text-sm">Generative AI</span>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>

@@ -62,8 +62,8 @@ const Projects = () => {
         "Score tracking"
       ],
       links: {
-        github: "#",
-        demo: "#"
+        github: "https://github.com/NssGourav/Game",
+        demo: "https://nssgourav.github.io/Game/"
       },
       date: "March 2025"
     },
@@ -76,8 +76,8 @@ const Projects = () => {
         "Impact: Strengthened problem-solving abilities and hands-on experience"
       ],
       links: {
-        github: "#",
-        demo: "#"
+        github: "https://github.com/NssGourav/Sem1-Project",
+        demo: "https://nssgourav.github.io/Sem1-Project/"
       },
       date: "December 2024"
     }
@@ -181,24 +181,14 @@ const Projects = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              whileHover={{ 
-                scale: 1.02, 
-                y: -5, 
-                rotate: index % 2 === 0 ? 1 : -1,
-                transition: { duration: 0.3 }
-              }}
               style={{
                 rotateX: useTransform(smoothProgress, [0, 0.5, 1], [0, index % 2 === 0 ? 2 : -2, 0]),
                 rotateY: useTransform(smoothProgress, [0, 0.5, 1], [0, index % 2 === 0 ? -2 : 2, 0])
               }}
-              className="bg-white/90 dark:bg-gray-800/90 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-primary-500 group relative overflow-hidden"
+              className="bg-white/90 dark:bg-gray-800/90 p-6 rounded-lg shadow-lg border-l-4 border-primary-500 group relative overflow-hidden"
             >
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
-              
               {/* Project content */}
-              <h3 className="text-2xl font-semibold mb-4 text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300 transition-colors">
+              <h3 className="text-2xl font-semibold mb-4 text-primary-600 dark:text-primary-400">
                 {project.title}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
@@ -206,28 +196,24 @@ const Projects = () => {
               </p>
               <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2 mb-4">
                 {project.features.map((feature, i) => (
-                  <li key={i} className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  <li key={i}>
                     {feature}
                   </li>
                 ))}
               </ul>
               <div className="flex gap-4">
-                <motion.a
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  href={project.links.github}
-                  className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-lg hover:shadow-primary-600/50"
+                <button
+                  onClick={() => window.open(project.links.github, '_blank')}
+                  className="px-4 py-2 bg-primary-600 text-white rounded-lg"
                 >
                   View Code
-                </motion.a>
-                <motion.a
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  href={project.links.demo}
-                  className="px-4 py-2 border-2 border-primary-600 text-primary-600 dark:text-primary-400 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors shadow-lg hover:shadow-primary-600/30"
+                </button>
+                <button
+                  onClick={() => window.open(project.links.demo, '_blank')}
+                  className="px-4 py-2 border-2 border-primary-600 text-primary-600 dark:text-primary-400 rounded-lg"
                 >
                   Live Demo
-                </motion.a>
+                </button>
               </div>
             </motion.div>
           ))}
